@@ -1,5 +1,2 @@
-require "personalized_recipes/version"
-
-module PersonalizedRecipes
-  # Your code goes here...
-end
+require_relative "./personalized_recipes/version"
+require_relative "./personalized_recipes/CLI"

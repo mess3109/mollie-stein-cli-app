@@ -2,10 +2,16 @@
 
 class PersonalizedRecipes::CLI
 
-  attr_accessor :recipes, :total
+  attr_accessor :recipes, :total, :ingredients_to_remove
+
+  @@ingredients_to_remove = ["beef", "chicken", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
     start
+  end
+
+  def self.ingredients_to_remove
+    @@ingredients_to_remove
   end
 
   def start

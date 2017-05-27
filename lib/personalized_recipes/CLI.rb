@@ -16,7 +16,11 @@ class PersonalizedRecipes::CLI
 
   def start
     PersonalizedRecipes::Scraper.scrape_site
-    puts "How many recipes are interested in today?"
+    PersonalizedRecipes::Recipe.all.each{|recipe|
+      PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
+      PersonalizedRecipes::Recipe.remove_recipe(recipe)
+      }
+    puts "How many recipes are you interested in today?"
     @@total = gets.strip.to_i - 1
     list_recipes
     menu

@@ -33,31 +33,32 @@ class PersonalizedRecipes::CLI
   end
 
   def list_recipes
-    puts "-------  Recipes  -------"
+    puts "\n-------  Recipes  -------"
     @recipes = PersonalizedRecipes::Recipe.all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }
+    puts "\nWhich Recipe would you like to view?"
   end
 
   def menu
     input = nil
     while input != "exit"
-      puts "Which Recipe would you like to view?  Or type list to see recipes again.  Or type exit. "
+      #puts "Which Recipe would you like to view?  Or type list to see recipes again.  Or type exit. "
       input = gets.strip
       #Add validation function for recipe #
-      if input.to_i > 0
+      if input.to_i > 0 && input.to_i <= @@total + 1
         recipe = @recipes[input.to_i - 1]
          #prevents scraping more than once
          if recipe.yield == nil
            PersonalizedRecipes::Scraper.scrape_recipe(recipe)
          end
         recipe.print
+        puts "Please type list or exit."
       elsif input == "list"
         list_recipes
-      elsif input == "exit"
       else
-        puts "Invalid input.  Please type list or exit."
+        puts "Invalid input.  Please type list or exit.\n"
       end
     end
   end

@@ -11,19 +11,15 @@ class PersonalizedRecipes::CLI
   def start
     PersonalizedRecipes::Scraper.scrape_site
     puts "How many recipes are interested in today?"
-    @@total = gets.strip.to_i
+    @@total = gets.strip.to_i - 1
     list_recipes
     menu
     end_program
   end
 
-  def self.total
-    @@total
-  end
-
   def list_recipes
     puts "-----  Recipes  -----"
-    @recipes = PersonalizedRecipes::Recipe.all
+    @recipes = PersonalizedRecipes::Recipe.all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }

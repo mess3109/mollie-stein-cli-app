@@ -36,8 +36,7 @@ class PersonalizedRecipes::CLI
         recipe = @recipes[input.to_i-1]
         PersonalizedRecipes::Scraper.scrape_recipe(recipe)
         #create print function
-        puts recipe.ing_list
-        puts recipe.instructions
+        recipe.print
       elsif input== "list"
         list_recipes
       else

@@ -32,8 +32,8 @@ class PersonalizedRecipes::CLI
   end
 
   def list_recipes
-    puts "-----  Recipes  -----"
-    @recipes = PersonalizedRecipes::Recipe.all[0..@@total]
+    puts "-------  Recipes  -------"
+    @recipes = PersonalizedRecipes::Recipe.all[0..@@total-1]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }
@@ -52,8 +52,10 @@ class PersonalizedRecipes::CLI
            PersonalizedRecipes::Scraper.scrape_recipe(recipe)
          end
         recipe.print
-      elsif input== "list"
+      elsif input == "list"
         list_recipes
+      elsif input == "exit"
+        input = exit
       else
         puts "Invalid input.  Please type list or exit."
       end

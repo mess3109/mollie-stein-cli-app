@@ -1,5 +1,5 @@
 class PersonalizedRecipes::Recipe
-  attr_accessor :title, :starred, :url, :recipes
+  attr_accessor :title, :starred, :url, :recipes, :yield, :ing_list, :instructions
   @@recipes = []
 
   def self.all

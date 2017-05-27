@@ -9,6 +9,7 @@ class PersonalizedRecipes::CLI
   end
 
   def start
+  #  PersonalizedRecipes::Scraper.scrape_recipe
     PersonalizedRecipes::Scraper.scrape_site
     puts "How many recipes are interested in today?"
     @@total = gets.strip.to_i - 1
@@ -32,7 +33,12 @@ class PersonalizedRecipes::CLI
       input = gets.strip
       #Add validation function for recipe #
       if input.to_i > 0
-        puts @recipes[input.to_i-1].name
+        #puts @recipes[input.to_i-1].
+        recipe = @recipes[input.to_i-1]
+        PersonalizedRecipes::Scraper.scrape_recipe(recipe)
+        #create print function
+        puts recipe.ing_list
+        puts recipe.instructions
       elsif input== "list"
         list_recipes
       else

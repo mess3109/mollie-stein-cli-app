@@ -10,7 +10,6 @@ class PersonalizedRecipes::CLI
 
   def start
     PersonalizedRecipes::Scraper.scrape_site
-    #binding.pry
     puts "How many recipes are interested in today?"
     @@total = gets.strip.to_i - 1
     list_recipes
@@ -33,9 +32,10 @@ class PersonalizedRecipes::CLI
       input = gets.strip
       #Add validation function for recipe #
       if input.to_i > 0
-        recipe = @recipes[input.to_i-1]
+        recipe = @recipes[input.to_i - 1]
+        # if recipe.yield = nil
         PersonalizedRecipes::Scraper.scrape_recipe(recipe)
-        #create print function
+        # end
         recipe.print
       elsif input== "list"
         list_recipes

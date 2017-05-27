@@ -16,8 +16,8 @@ class PersonalizedRecipes::Recipe
     puts "#{@yield} \n\n"
     puts "----- Ingredients ----- \n\n"
     @ing_list.each{ |ing|
-      puts ing
-      }
+     puts ing.strip
+     }
     puts "\n"
     puts "----- Instructions ----- \n\n"
     @instructions.each.with_index(1) {|instr, index|

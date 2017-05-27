@@ -19,7 +19,7 @@ class PersonalizedRecipes::Scraper
 #input is an instance of a recipe
   def self.scrape_recipe(recipe)
     doc = Nokogiri::HTML(open("https://food52.com" + recipe.url))
-    recipe.yield = doc.css(".recipe p strong").text
+    recipe.yield = doc.css("p[itemprop='recipeYield']").text.strip
     recipe.ing_list = doc.css(".recipe-list").children.css("li").collect{|child| child.css(".recipe-list-quantity").text + " " + child.css(".recipe-list-item-name").text.strip}
     recipe.instructions = doc.css("ol li").collect{|item| item.text.strip}
   end

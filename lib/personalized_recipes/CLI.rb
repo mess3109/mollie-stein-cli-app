@@ -15,15 +15,16 @@ class PersonalizedRecipes::CLI
   end
 
   def start
-    puts "How many recipes are you interested in today?"
+    puts "How many recipes are you interested in today (up to 24)?"
     @@total = gets.strip.to_i - 1
+    if @@total < 0 || @@total > 23
+      puts "Invalud input."
+      start
+    end
     PersonalizedRecipes::Scraper.scrape_site
     all_clone = PersonalizedRecipes::Recipe.all.clone
-    PersonalizedRecipes::Recipe.all.each { |recipe|
-      PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
-      }
-    #all_clone created for iteration
     all_clone.each { |recipe|
+      PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
       PersonalizedRecipes::Recipe.remove_recipe(recipe)
       }
     list_recipes
@@ -33,7 +34,7 @@ class PersonalizedRecipes::CLI
 
   def list_recipes
     puts "-------  Recipes  -------"
-    @recipes = PersonalizedRecipes::Recipe.all[0..@@total-1]
+    @recipes = PersonalizedRecipes::Recipe.all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }
@@ -55,7 +56,6 @@ class PersonalizedRecipes::CLI
       elsif input == "list"
         list_recipes
       elsif input == "exit"
-        input = exit
       else
         puts "Invalid input.  Please type list or exit."
       end

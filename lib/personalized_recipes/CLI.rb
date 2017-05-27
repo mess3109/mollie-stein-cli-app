@@ -1,12 +1,12 @@
-#Our CLI Controller
-
 class PersonalizedRecipes::CLI
 
-  attr_accessor :recipes, :total, :ingredients_to_remove
+  attr_accessor :recipes, :total, :ingredients_to_remove, :recipes_all
 
   @@ingredients_to_remove = ["beef", "chicken", "steak", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
+    welcome_message
+    call_scrape
     start
   end
 
@@ -14,22 +14,36 @@ class PersonalizedRecipes::CLI
     @@ingredients_to_remove
   end
 
+  def recipes_all
+    PersonalizedRecipes::Recipe.all
+  end
+
+  def welcome_message
+    puts "Pulling recipes from Food52 without the following ingredients..."
+    @@ingredients_to_remove.each{ |item|
+      puts item.capitalize
+    }
+  end
+
   def start
-    puts "How many recipes are you interested in today (up to 24)?"
+    puts "How many recipes are you interested in today (up to #{recipes_all.length})?"
     @@total = gets.strip.to_i - 1
-    if @@total < 0 || @@total > 23
+    if @@total < 0 || @@total > recipes_all.length - 1
       puts "Invalud input."
       start
     end
+    list_recipes
+    menu
+    end_program
+  end
+
+  def call_scrape
     PersonalizedRecipes::Scraper.scrape_site
     all_clone = PersonalizedRecipes::Recipe.all.clone
     all_clone.each { |recipe|
       PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
       PersonalizedRecipes::Recipe.remove_recipe(recipe)
       }
-    list_recipes
-    menu
-    end_program
   end
 
   def list_recipes
@@ -57,6 +71,7 @@ class PersonalizedRecipes::CLI
         puts "Please type list or exit."
       elsif input == "list"
         list_recipes
+      elsif input == "exit"
       else
         puts "Invalid input.  Please type list or exit.\n"
       end

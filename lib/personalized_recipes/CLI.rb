@@ -2,22 +2,30 @@
 
 class PersonalizedRecipes::CLI
 
-  attr_accessor :recipes
+  attr_accessor :recipes, :total
 
   def initialize
     start
   end
 
   def start
+    PersonalizedRecipes::Scraper.scrape_site
+    puts "How many recipes are interested in today?"
+    @@total = gets.strip.to_i
     list_recipes
     menu
     end_program
   end
 
+  def self.total
+    @@total
+  end
+
   def list_recipes
+    puts "-----  Recipes  -----"
     @recipes = PersonalizedRecipes::Recipe.all
     @recipes.each.with_index(1) { |recipe, i|
-      puts "#{i}. #{recipe.name} - favorited by #{recipe.favorited}"
+      puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }
   end
 
@@ -26,6 +34,7 @@ class PersonalizedRecipes::CLI
     while input != "exit"
       puts "Which Recipe would you like to view?  Or type list to see recipes again.  Or type exit. "
       input = gets.strip
+      #Add validation function for recipe #
       if input.to_i > 0
         puts @recipes[input.to_i-1].name
       elsif input== "list"

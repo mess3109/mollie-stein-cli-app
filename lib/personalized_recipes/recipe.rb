@@ -26,7 +26,7 @@ class PersonalizedRecipes::Recipe
   end
 
   def self.remove_recipe(recipe)
-    if recipe.ing_list.collect{|item| item.split(" ")}.flatten & PersonalizedRecipes::CLI.ingredients_to_remove != nil
+    if recipe.ing_list.collect{|item| item.downcase.split(" ")}.flatten & PersonalizedRecipes::CLI.ingredients_to_remove != Array.new
       self.all.delete(recipe)
     end
   end

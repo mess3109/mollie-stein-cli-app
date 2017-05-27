@@ -4,7 +4,7 @@ class PersonalizedRecipes::CLI
 
   attr_accessor :recipes, :total, :ingredients_to_remove
 
-  @@ingredients_to_remove = ["beef", "chicken", "pork", "ham", "cilantro", "orange", "oranges"]
+  @@ingredients_to_remove = ["beef", "chicken", "steak", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
     start
@@ -15,13 +15,17 @@ class PersonalizedRecipes::CLI
   end
 
   def start
-    PersonalizedRecipes::Scraper.scrape_site
-    PersonalizedRecipes::Recipe.all.each{|recipe|
-      PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
-      PersonalizedRecipes::Recipe.remove_recipe(recipe)
-      }
     puts "How many recipes are you interested in today?"
     @@total = gets.strip.to_i - 1
+    PersonalizedRecipes::Scraper.scrape_site
+    all_clone = PersonalizedRecipes::Recipe.all.clone
+    PersonalizedRecipes::Recipe.all.each { |recipe|
+      PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
+      }
+    #all_clone created for iteration
+    all_clone.each { |recipe|
+      PersonalizedRecipes::Recipe.remove_recipe(recipe)
+      }
     list_recipes
     menu
     end_program

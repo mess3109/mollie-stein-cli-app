@@ -33,9 +33,10 @@ class PersonalizedRecipes::CLI
       #Add validation function for recipe #
       if input.to_i > 0
         recipe = @recipes[input.to_i - 1]
-        # if recipe.yield = nil
-        PersonalizedRecipes::Scraper.scrape_recipe(recipe)
-        # end
+         #prevents scraping more than once
+         if recipe.yield == nil
+           PersonalizedRecipes::Scraper.scrape_recipe(recipe)
+         end
         recipe.print
       elsif input== "list"
         list_recipes

@@ -2,7 +2,7 @@ class PersonalizedRecipes::CLI
 
   attr_accessor :recipes, :total, :ingredients_to_remove, :recipes_all
 
-  @@ingredients_to_remove = ["instant","beef", "chicken", "steak", "pork", "ham", "cilantro", "orange", "oranges"]
+  @@ingredients_to_remove = ["instant", "chicken", "beef", "steak", "bacon", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
     welcome_message
@@ -48,7 +48,7 @@ class PersonalizedRecipes::CLI
   end
 
   def list_recipes
-    puts "\n-------  Recipes  -------"
+    puts "\n-------  Recipes  -------\n\n"
     @recipes = recipes_all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"

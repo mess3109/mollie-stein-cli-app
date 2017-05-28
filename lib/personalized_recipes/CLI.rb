@@ -2,7 +2,7 @@ class PersonalizedRecipes::CLI
 
   attr_accessor :recipes, :total, :ingredients_to_remove, :recipes_all
 
-  @@ingredients_to_remove = ["beef", "chicken", "steak", "pork", "ham", "cilantro", "orange", "oranges"]
+  @@ingredients_to_remove = ["instant","beef", "chicken", "steak", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
     welcome_message
@@ -19,14 +19,15 @@ class PersonalizedRecipes::CLI
   end
 
   def welcome_message
-    puts "Pulling recipes from Food52 without the following ingredients..."
+    puts "\n------- Welcome to Personalized Recipes -------"
+    puts "\nPulling recipes from Food52 without the following ingredients...\n\n"
     @@ingredients_to_remove.each{ |item|
       puts item.capitalize
     }
   end
 
   def start
-    puts "How many recipes are you interested in today (up to #{recipes_all.length})?"
+    puts "\nHow many recipes are you interested in today (up to #{recipes_all.length})?"
     @@total = gets.strip.to_i - 1
     if @@total < 0 || @@total > recipes_all.length - 1
       puts "Invalud input."
@@ -48,7 +49,7 @@ class PersonalizedRecipes::CLI
 
   def list_recipes
     puts "\n-------  Recipes  -------"
-    @recipes = PersonalizedRecipes::Recipe.all[0..@@total]
+    @recipes = recipes_all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
     }
@@ -58,9 +59,7 @@ class PersonalizedRecipes::CLI
   def menu
     input = nil
     while input != "exit"
-      #puts "Which Recipe would you like to view?  Or type list to see recipes again.  Or type exit. "
       input = gets.strip
-      #Add validation function for recipe #
       if input.to_i > 0 && input.to_i <= @@total + 1
         recipe = @recipes[input.to_i - 1]
          #prevents scraping more than once

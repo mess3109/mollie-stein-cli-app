@@ -2,9 +2,10 @@ class PersonalizedRecipes::CLI
 
   attr_accessor :recipes, :total, :ingredients_to_remove, :recipes_all
 
-  @@ingredients_to_remove = ["instant", "chicken", "beef", "steak", "bacon", "pork", "ham", "cilantro", "orange", "oranges"]
+  #@@ingredients_to_remove = ["instant", "chicken", "beef", "steak", "bacon", "pork", "ham", "cilantro", "orange", "oranges"]
 
   def initialize
+    @@ingredients_to_remove = []
     welcome_message
     call_scrape
     start
@@ -18,11 +19,26 @@ class PersonalizedRecipes::CLI
     PersonalizedRecipes::Recipe.all
   end
 
+  def remove_ingredients
+    input = nil
+    while input != "done"
+      input = gets.strip.downcase
+      if input.to_i > 0
+        puts "Invalid input."
+      elsif input == "done"
+      else
+        @@ingredients_to_remove << input
+      end
+    end
+  end
+
   def welcome_message
     puts "\n------- Welcome to Personalized Recipes -------"
+    puts "Which ingredients would you like to exclude?  Type one word at a time, no spaces.  Type done when finished.  "
+    remove_ingredients
     puts "\nPulling recipes from Food52 without the following ingredients...\n\n"
     @@ingredients_to_remove.each{ |item|
-      puts item.capitalize
+      puts item
     }
   end
 

@@ -6,8 +6,6 @@ class PersonalizedRecipes::CLI
 
   def initialize
     @@ingredients_to_remove = []
-    welcome_message
-    call_scrape
     start
   end
 
@@ -34,7 +32,7 @@ class PersonalizedRecipes::CLI
 
   def welcome_message
     puts "\n------- Welcome to Personalized Recipes -------"
-    puts "Which ingredients would you like to exclude?  Type one word at a time, no spaces.  Type done when finished.  "
+    puts "Which ingredients would you like to exclude?  Type one word at a time without spaces.  Type done when finished.  "
     remove_ingredients
     puts "\nPulling recipes from Food52 without the following ingredients...\n\n"
     @@ingredients_to_remove.each{ |item|
@@ -43,6 +41,8 @@ class PersonalizedRecipes::CLI
   end
 
   def start
+    welcome_message
+    call_scrape
     puts "\nHow many recipes are you interested in today (up to #{recipes_all.length})?"
     @@total = gets.strip.to_i - 1
     if @@total < 0 || @@total > recipes_all.length - 1

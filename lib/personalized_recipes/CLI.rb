@@ -17,12 +17,25 @@ class PersonalizedRecipes::CLI
     PersonalizedRecipes::Recipe.all
   end
 
+
+  def start
+    welcome_message
+    call_scrape
+    list_recipes
+    menu
+    end_program
+  end
+
   def remove_ingredients
+    puts "\nWhich ingredients would you like to exclude?  \nInput one word at a time without spaces.  \nInput none for all recipes.  \nInput done when finished.  \n"
     input = nil
     while input != "done"
       input = gets.strip.downcase
       if input.to_i > 0
         puts "Invalid input."
+      elsif input = "none"
+        @@ingredients_to_remove = Array.new
+        input = "done"
       elsif input == "done"
       else
         @@ingredients_to_remove << input
@@ -32,26 +45,11 @@ class PersonalizedRecipes::CLI
 
   def welcome_message
     puts "\n------- Welcome to Personalized Recipes -------"
-    puts "Which ingredients would you like to exclude?  Type one word at a time without spaces.  Type done when finished.  "
     remove_ingredients
     puts "\nPulling recipes from Food52 without the following ingredients...\n\n"
     @@ingredients_to_remove.each{ |item|
       puts item
     }
-  end
-
-  def start
-    welcome_message
-    call_scrape
-    puts "\nHow many recipes are you interested in today (up to #{recipes_all.length})?"
-    @@total = gets.strip.to_i - 1
-    if @@total < 0 || @@total > recipes_all.length - 1
-      puts "Invalud input."
-      start
-    end
-    list_recipes
-    menu
-    end_program
   end
 
   def call_scrape
@@ -64,6 +62,12 @@ class PersonalizedRecipes::CLI
   end
 
   def list_recipes
+    puts "\nHow many recipes are you interested in today (up to #{recipes_all.length})?"
+    @@total = gets.strip.to_i - 1
+    if @@total < 0 || @@total > recipes_all.length - 1
+      puts "Invalud input."
+      start
+    end
     puts "\n-------  Recipes  -------\n\n"
     @recipes = recipes_all[0..@@total]
     @recipes.each.with_index(1) { |recipe, i|

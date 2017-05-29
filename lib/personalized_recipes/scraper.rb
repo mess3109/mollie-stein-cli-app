@@ -24,7 +24,7 @@ class PersonalizedRecipes::Scraper
 
   #ingredients are scraped separately to exclude recipes at the beginning
   def self.scrape_ingredient_list(recipe)
-    doc = Nokogiri::HTML(open("https://food52.com" + recipe.url))
+    doc = Nokogiri::HTML(open("https://food52.com" + recipe.url))    
     recipe.ing_list = doc.css(".recipe-list").children.css("li").collect{|child| child.css(".recipe-list-quantity").text + " " + child.css(".recipe-list-item-name").text.strip}
   end
 

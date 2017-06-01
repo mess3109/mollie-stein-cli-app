@@ -2,13 +2,11 @@ class PersonalizedRecipes::CLI
 
   attr_accessor :recipes, :total, :ingredients_to_remove, :recipes_all
 
-  @@ingredients_to_remove_mes = ["instant", "chicken", "beef", "steak", "bacon", "pork", "ham", "cilantro", "orange", "oranges"]
-
   def initialize
     @@ingredients_to_remove = []
     start
   end
-
+  
   def self.ingredients_to_remove
     @@ingredients_to_remove
   end
@@ -45,7 +43,7 @@ class PersonalizedRecipes::CLI
         @@ingredients_to_remove = Array.new
         input = "done"
       elsif input == "mes"
-        @@ingredients_to_remove = @@ingredients_to_remove_mes
+        @@ingredients_to_remove = PersonalizedRecipes::Recipe.ingredients_to_remove_mes
         input = "done"
       elsif input == "done"
       else

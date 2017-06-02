@@ -4,11 +4,11 @@ Personalized Recipes is a CLI Ruby Gem that pulls features from the Food52 Blog.
 
 ## Installation
 
-Clone the repository and run 'gem install ./Personalized-Recipes-1.1.2.gem'
+Clone the repository and run 'gem install ./Personalized-Recipes-1.1.2.gem'.
 
 ## Usage
 
-After installation, run "personalized-recipes" to begin.
+After installation, run 'personalized-recipes' to begin.
 
 ## Development
 

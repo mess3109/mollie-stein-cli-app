@@ -6,7 +6,7 @@ class PersonalizedRecipes::CLI
     @@ingredients_to_remove = []
     start
   end
-  
+
   def self.ingredients_to_remove
     @@ingredients_to_remove
   end
@@ -24,28 +24,27 @@ class PersonalizedRecipes::CLI
   end
 
   def welcome_message
-    puts "\n------- Welcome to Personalized Recipes -------"
+    puts "\n------- Welcome to Personalized Recipes from Food52-------"
     remove_ingredients
-    puts "\nPulling featured recipes from Food52 without the following ingredients...\n\n"
-    @@ingredients_to_remove.each{ |item|
-      puts item
-    }
+    if @@ingredients_to_remove.size > 0
+      puts "\nPulling featured recipes without the following ingredient(s)...\n\n"
+      @@ingredients_to_remove.each{|item| puts item}
+    else
+      puts "\nPulling all featured recipes...\n\n"
+    end
   end
 
   def remove_ingredients
     puts "\nWhich ingredients would you like to exclude?  \n  Input one word at a time without spaces  \n  Input none for all recipes  \n  Input done when finished  \n"
-    input = nil
-    while input != "done"
-      input = gets.strip.downcase
+    while (input = gets.strip.downcase) != "done" do
       if input.to_i > 0
         puts "Invalid input."
       elsif input == "none"
         @@ingredients_to_remove = Array.new
-        input = "done"
+        break
       elsif input == "mes"
         @@ingredients_to_remove = PersonalizedRecipes::Recipe.ingredients_to_remove_mes
-        input = "done"
-      elsif input == "done"
+        break
       else
         @@ingredients_to_remove << input
       end
@@ -55,10 +54,10 @@ class PersonalizedRecipes::CLI
   def call_scrape
     PersonalizedRecipes::Scraper.scrape_site
     all_clone = PersonalizedRecipes::Recipe.all.clone
-    all_clone.each { |recipe|
+    all_clone.each do |recipe|
       PersonalizedRecipes::Scraper.scrape_ingredient_list(recipe)
       PersonalizedRecipes::Recipe.remove_recipe(recipe)
-      }
+    end
   end
 
   def list_recipes
@@ -70,30 +69,42 @@ class PersonalizedRecipes::CLI
     end
     puts "\n-------  Recipes  -------\n\n"
     @recipes = recipes_all[0..@@total]
-    @recipes.each.with_index(1) { |recipe, i|
+    @recipes.each.with_index(1) do |recipe, i|
       puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
-    }
+    end
     puts "\nWhich Recipe would you like to view?"
   end
 
   def menu
     input = nil
-    while input != "exit"
-      input = gets.strip
+    while (input = gets.strip.downcase) != "exit" do
+      #input = gets.strip.downcase
       if input.to_i > 0 && input.to_i <= @@total + 1
         recipe = @recipes[input.to_i - 1]
          #prevents scraping more than once
          if recipe.yield == nil
            PersonalizedRecipes::Scraper.scrape_recipe(recipe)
          end
-        recipe.print
+        print(recipe)
         puts "Please type list or exit."
       elsif input == "list"
         list_recipes
-      elsif input == "exit"
       else
         puts "Invalid input.  Please type list or exit.\n"
       end
+    end
+  end
+
+  def print(recipe)
+    puts "------- #{recipe.title} ------- \n\n"
+    puts "Starred by #{recipe.starred} people\n\n"
+    puts "#{recipe.yield} \n\n"
+    puts "------- Ingredients ------- \n\n"
+    recipe.ing_list.each{ |ing| puts ing.strip}
+    puts "\n"
+    puts "------- Instructions ------- \n\n"
+    recipe.instructions.each.with_index(1) do |instr, index|
+      puts "#{index}. #{instr} \n\n"
     end
   end
 

@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 #require 'bundler/setup'
-require './lib/personalized_recipes'
+require_relative '../lib/personalized_recipes'
 PersonalizedRecipes::CLI.new

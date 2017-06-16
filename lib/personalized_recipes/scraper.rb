@@ -2,17 +2,17 @@ class PersonalizedRecipes::Scraper
 
   def self.scrape_site
     doc = Nokogiri::HTML(open("https://food52.com/recipes/"))
-    doc.css(".collectable-tile.js-collectable-tile.quick-basket-wrap").each{ |section|
+    doc.css(".collectable-tile.js-collectable-tile.quick-basket-wrap").each do |section|
       recipe = PersonalizedRecipes::Recipe.new
-      section.children.css("h3 a").each{|link|
+      section.children.css("h3 a").each do |link|
         if link.attribute("title")
           recipe.title = link.attribute("title").value
           recipe.url = link.attribute("href").value
         end
-        }
+      end
       recipe.starred = section.children.css(".counter").text
       recipe.save
-    }
+    end
   end
 
   #input is an instance of a recipe
@@ -24,7 +24,7 @@ class PersonalizedRecipes::Scraper
 
   #ingredients are scraped separately to exclude recipes at the beginning
   def self.scrape_ingredient_list(recipe)
-    doc = Nokogiri::HTML(open("https://food52.com" + recipe.url))    
+    doc = Nokogiri::HTML(open("https://food52.com" + recipe.url))
     recipe.ing_list = doc.css(".recipe-list").children.css("li").collect{|child| child.css(".recipe-list-quantity").text + " " + child.css(".recipe-list-item-name").text.strip}
   end
 

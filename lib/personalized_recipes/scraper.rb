@@ -2,7 +2,7 @@ class PersonalizedRecipes::Scraper
 
   def self.scrape_site
     doc = Nokogiri::HTML(open("https://food52.com/recipes/"))
-    doc.css(".collectable-tile.js-collectable-tile.quick-basket-wrap").each do |section|
+    doc.css(".collectable-tile.js-collectable-tile").each do |section|
       recipe = PersonalizedRecipes::Recipe.new
       section.children.css("h3 a").each do |link|
         if link.attribute("title")

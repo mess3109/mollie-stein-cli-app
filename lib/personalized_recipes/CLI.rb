@@ -64,13 +64,13 @@ class PersonalizedRecipes::CLI
     puts "\nHow many recipes are you interested in today (up to #{recipes_all.length})?"
     @@total = gets.strip.to_i - 1
     if @@total < 0 || @@total > recipes_all.length - 1
-      puts "Invalud input."
+      puts "Invalid input."
       list_recipes
     end
     puts "\n-------  Recipes  -------\n\n"
     @recipes = recipes_all[0..@@total]
     @recipes.each.with_index(1) do |recipe, i|
-      puts "#{i}. #{recipe.title} - starred by #{recipe.starred}"
+      puts "#{i}. #{recipe.title}"
     end
     puts "\nWhich Recipe would you like to view?"
   end

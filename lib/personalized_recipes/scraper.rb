@@ -10,7 +10,6 @@ class PersonalizedRecipes::Scraper
           recipe.url = link.attribute("href").value
         end
       end
-      recipe.starred = section.children.css(".counter").text
       recipe.save
     end
   end
